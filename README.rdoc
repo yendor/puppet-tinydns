@@ -30,10 +30,24 @@ Add dns records based on the http://cr.yp.to/djbdns/tinydns-data.html format. Th
     dnsrecord { "puppet server for thdojo":
       ensure => present,
       type => ".",
-      fqdn => "thedojo",
+      fqdn => "puppet.thedojo",
       ipaddr => "192.168.1.1",
       notify => Exec["rebuild-tinydns-data"]
     }
+    
+This assumes that you have a domain called thedojo and want to add an NS record for it at 192.168.1.1 and setup puppet.thedojo as an A record.
+
+If you want to setup reverse dns for the 192.168.1.0/24 subnet you could add 
+
+    dnsrecord { "reverse dns for 192.168.1.0/24 subnet":
+      ensure => present,
+      type => ".",
+      fqdn => "1.168.192.in-addr.arpa",
+      ipaddr => "192.168.1.1",
+      notify => Exec["rebuild-tinydns-data"]
+    }
+
+Once this is in, you can use the = dns record type to add forward and reverse dns records with one dnsrecord definition.
 
 If you use exported resources then you can add a dns entry for all your servers using this class automatically by including this on all the servers
 
@@ -45,6 +59,8 @@ If you use exported resources then you can add a dns entry for all your servers 
       ttl => 300,
       notify => Exec["rebuild-tinydns-data"]
     }
+    
+Which will add forward and reverse dns entries for each machine with a TTL of 300 seconds.
     
 == Notes
 
