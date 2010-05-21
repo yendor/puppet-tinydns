@@ -1,0 +1,47 @@
+= Puppet-tinydns
+
+This module can be used to manage tinydns data files
+
+== Installation
+
+First get a copy of the module
+
+    cd /etc/puppet/modules
+    git clone git://github.com/yendor/puppet-tinydns.git tinydns
+    
+Also make sure you have your module path setup and plugin sync enabled
+    
+== Usage
+
+Include the setup class to get the command to rebuild the data.cdb file
+
+    include tinydns::setup
+
+Add dns records based on the http://cr.yp.to/djbdns/tinydns-data.html format. The types are the types specified in that format
+
+    dnsrecord { "nameserver for thdojo":
+      ensure => present,
+      type => ".",
+      fqdn => "thedojo",
+      ipaddr => "192.168.1.1",
+      notify => Exec["rebuild-tinydns-data"]
+    }
+    
+    dnsrecord { "puppet server for thdojo":
+      ensure => present,
+      type => ".",
+      fqdn => "thedojo",
+      ipaddr => "192.168.1.1",
+      notify => Exec["rebuild-tinydns-data"]
+    }
+
+If you use exported resources then you can add a dns entry for all your servers using this class automatically by including this on all the servers
+
+    @@dnsrecord { "forward and reverse dns for $fqdn":
+      ensure => "present",
+      type => "=",
+      fqdn => "$fqdn",
+      ipaddr => "$ipaddress",
+      ttl => 300,
+      notify => Exec["rebuild-tinydns-data"]
+    }
