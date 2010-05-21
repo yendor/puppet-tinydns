@@ -45,3 +45,7 @@ If you use exported resources then you can add a dns entry for all your servers 
       ttl => 300,
       notify => Exec["rebuild-tinydns-data"]
     }
+    
+== Notes
+
+All the types of records specified in the tinydns-data format have been implemented aside from the Z record type.
