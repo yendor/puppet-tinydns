@@ -61,6 +61,12 @@ If you use exported resources then you can add a dns entry for all your servers 
     }
     
 Which will add forward and reverse dns entries for each machine with a TTL of 300 seconds.
+
+Then on the actual dns server add 
+
+Dnsrecord <<| |>>
+
+to collect all the dns records on the server
     
 == Notes
 
